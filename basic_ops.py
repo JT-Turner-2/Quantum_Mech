@@ -21,7 +21,7 @@ def U_x(state, target_particle):
             mat = np.kron(mat, np.identity(2))
         else:
             mat = np.kron(mat, SIGMA_1)
-
+    state = np.matmul(mat, state)
     return state
 
 
