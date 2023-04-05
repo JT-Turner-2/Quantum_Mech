@@ -2,10 +2,11 @@
 # Each operation should take in the initial state and an identifier of which particles to act on and return the end state
 # TODO: determine if we want to use SE or simple matrix mechanics to model our operators
 import numpy as np
+
 # Defining Pauli spin mats
-SIGMA_1 = np.array[[complex(0), complex(1, 0)], [complex(1, 0), complex(0)]]
-SIGMA_2 = np.array[[complex(0), complex(0, -1)], [complex(0, 1), complex(0)]]
-SIGMA_3 = np.array[[complex(1), complex(0)], [complex(0), complex(-1)]]
+SIGMA_1 = np.array([[complex(0), complex(1, 0)], [complex(1, 0), complex(0)]])
+SIGMA_2 = np.array([[complex(0), complex(0, -1)], [complex(0, 1), complex(0)]])
+SIGMA_3 = np.array([[complex(1), complex(0)], [complex(0), complex(-1)]])
 def U_x(state, target_particle):
     # NOT operator acting on target particle (particle #)
     # n = number of particles in system
@@ -17,7 +18,5 @@ def U_x(state, target_particle):
             mat = np.kron(mat, np.identity(2))
         else:
             mat = np.kron(mat, SIGMA_1)
-    state = np.matmul(mat, state)
-    return state
 
-
+    return np.matmul(mat, state)
