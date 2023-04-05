@@ -2,10 +2,6 @@
 # Each operation should take in the initial state and an identifier of which particles to act on and return the end state
 # TODO: determine if we want to use SE or simple matrix mechanics to model our operators
 import numpy as np
-import astropy
-from astropy import units as u
-from astropy.constants import hbar
-import cmath
 # Defining Pauli spin mats
 SIGMA_1 = np.array[[complex(0), complex(1, 0)], [complex(1, 0), complex(0)]]
 SIGMA_2 = np.array[[complex(0), complex(0, -1)], [complex(0, 1), complex(0)]]
