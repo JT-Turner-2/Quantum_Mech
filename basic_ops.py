@@ -1,7 +1,8 @@
 # File defining basic operations that act on states (2n element np array for n particles)
 # Each operation should take in the initial state and an identifier of which particles to act on and return the end state
-# TODO: determine if we want to use SE or simple matrix mechanics to model our operators
 import numpy as np
+import sympy as sym
+# Using sympy for sqrt 2 to be exact -- may need to change this, but hopefully will work
 
 # Defining Pauli spin mats
 SIGMA_1 = np.array([[complex(0), complex(1, 0)], [complex(1, 0), complex(0)]])
@@ -47,5 +48,15 @@ def U_z(state, target_particle):
     n = len(state)//2
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_3, target_particle, n)
+    return np.matmul(mat, state)
+
+
+def U_H(state, target_particle):
+    # Hadamard gate
+    n = len(state)//2
+    # 2x2 matrix for Hadamard gate acting on one particle:
+    small_mat = 1/(sym.sqrt(2)) * np.array([[1, 1], [1, -1]])
+    # 2n x 2n matrix to act on state:
+    mat = single_particle_op_mat(small_mat, target_particle, n)
     return np.matmul(mat, state)
 
