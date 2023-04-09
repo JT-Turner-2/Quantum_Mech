@@ -27,7 +27,7 @@ def single_particle_op_mat(small_mat, target_particle, n):
 def U_x(state, target_particle):
     # NOT operator acting on target particle (particle #)
     # n = number of particles in system
-    n = len(state)//2
+    n = int(np.log2(len(state)))
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_1, target_particle, n)
     return np.matmul(mat, state)
@@ -36,7 +36,7 @@ def U_x(state, target_particle):
 def U_y(state, target_particle):
     # pi rotation around y axis
     # n = number of particles in system
-    n = len(state)//2
+    n = int(np.log2(len(state)))
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_2, target_particle, n)
     return np.matmul(mat, state)
@@ -45,7 +45,7 @@ def U_y(state, target_particle):
 def U_z(state, target_particle):
     # Pi rotation around z axis
     # n = number of particles in system
-    n = len(state)//2
+    n = int(np.log2(len(state)))
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_3, target_particle, n)
     return np.matmul(mat, state)
@@ -53,7 +53,7 @@ def U_z(state, target_particle):
 
 def U_H(state, target_particle):
     # Hadamard gate
-    n = len(state)//2
+    n = int(np.log2(len(state)))
     # 2x2 matrix for Hadamard gate acting on one particle:
     small_mat = 1/(sym.sqrt(2)) * np.array([[1, 1], [1, -1]])
     # 2n x 2n matrix to act on state:
@@ -82,10 +82,10 @@ def kronecker_delta(m,n):
         return 0
 
 
-def U_CNOT(state, target_particle, control_particle):
+def U_CNOT(state, control_particle, target_particle):
     # Perform CNOT operation
     # To do this, we will need a new basis state where C and T are the first two particle
-    n = len(state) // 2  # number of particles
+    n = int(np.log2(len(state)))  # number of particles
     if target_particle == control_particle:
         raise ValueError("Target and Control particles must be different")
 
@@ -96,7 +96,11 @@ def U_CNOT(state, target_particle, control_particle):
     # The only operation we will need is rearranging the basis vectors to create our new basis
     comp = [x for x in range(len(state))]
     new_basis = [bin_swap(0, control_particle, x) for x in comp]
-    new_basis = [bin_swap(1, target_particle, x) for x in new_basis]
+    if target_particle == 0:
+        # The target particle is now in the control particle position
+        new_basis = [bin_swap(1, control_particle, x) for x in new_basis]
+    else:
+        new_basis = [bin_swap(1, target_particle, x) for x in new_basis]
     # Now define a change of basis matrix
     basis_change_mat = np.array([[kronecker_delta(c, b) for c in comp] for b in new_basis])
     # We can make U_CNOT matrix in new_basis as:
@@ -111,4 +115,7 @@ def U_CNOT(state, target_particle, control_particle):
     mat_comp_basis = basis_change_mat @ mat_new_basis @ basis_change_mat
     return mat_comp_basis @ state
 
-
+state = np.zeros(2**2)
+state[0] = 1
+print(state)
+print(U_CNOT(state, 0, 1))
