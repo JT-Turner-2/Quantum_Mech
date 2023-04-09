@@ -91,7 +91,6 @@ def U_CNOT(state, control_particle, target_particle):
 
     if target_particle > n or control_particle > n:
         raise ValueError("Invalid target or control particle: not enough particles in system")
-
     # To begin, we define our new basis state. Let integers represent the corresponding state in the computational basis
     # The only operation we will need is rearranging the basis vectors to create our new basis
     comp = [x for x in range(len(state))]
@@ -114,8 +113,3 @@ def U_CNOT(state, control_particle, target_particle):
         mat_new_basis = np.kron(mat_new_basis, np.identity(2))
     mat_comp_basis = basis_change_mat @ mat_new_basis @ basis_change_mat
     return mat_comp_basis @ state
-
-state = np.zeros(2**2)
-state[0] = 1
-print(state)
-print(U_CNOT(state, 0, 1))
