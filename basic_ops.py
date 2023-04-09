@@ -65,11 +65,16 @@ def to_bin_str(num: int, dig: int):
     # Take num and create a binary string of given length out of it
     return f'{num:b}'.zfill(dig)
 
+
 def bin_swap(m: int, n: int, num: int):
     # Swap mth and nth binary digits of num and return resulting integer
-    return
+    bin_rep = list(to_bin_str(num, max(n, m)))
+    bin_rep[-m], bin_rep[-n] = bin_rep[-n], bin_rep[-m]
+    int_rep = int(''.join(bin_rep), 2)
+    return int_rep
 
 
 def U_CNOT(state, target_particle, control_particle):
     # Perform CNOT operation
     return
+
