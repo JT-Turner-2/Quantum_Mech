@@ -68,7 +68,8 @@ def to_bin_str(num: int, dig: int):
 
 def bin_swap(m: int, n: int, num: int):
     # Swap mth and nth binary digits of num and return resulting integer
-    bin_rep = list(to_bin_str(num, max(n, m)))
+    n, m = n+1, m+1  # adjust for negative index
+    bin_rep = list(to_bin_str(num, max(n, m)+1))
     bin_rep[-m], bin_rep[-n] = bin_rep[-n], bin_rep[-m]
     int_rep = int(''.join(bin_rep), 2)
     return int_rep
@@ -77,4 +78,5 @@ def bin_swap(m: int, n: int, num: int):
 def U_CNOT(state, target_particle, control_particle):
     # Perform CNOT operation
     return
+
 
