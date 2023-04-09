@@ -84,13 +84,14 @@ def kronecker_delta(m,n):
 def U_CNOT(state, target_particle, control_particle):
     # Perform CNOT operation
     # To do this, we will need a new basis state where C and T are the first two particle
+    n = len(state) // 2  # number of particles
+
     if target_particle == control_particle:
         raise ValueError("Target and Control particles must be different")
 
-    if target_particle > state//2 or control_particle > state//2:
+    if target_particle > n or n:
         raise ValueError("Invalid target or control particle: not enough particles in system")
 
-    n = len(state) // 2  # number of particles
     # To begin, we define our new basis state. Let integers represent the corresponding state in the computational basis
     # The only operation we will need is rearranging the basis vectors to create our new basis
     comp = [x for x in range(len(state))]
