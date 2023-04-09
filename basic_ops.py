@@ -60,3 +60,12 @@ def U_H(state, target_particle):
     mat = single_particle_op_mat(small_mat, target_particle, n)
     return np.matmul(mat, state)
 
+
+def to_bin_str(num: int, dig: int):
+    # Take num and create a binary string of given length out of it
+    return f'{num:b}'.zfill(dig)
+
+
+def U_CNOT(state, target_particle, control_particle):
+    # Perform CNOT operation
+    return
