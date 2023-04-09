@@ -74,6 +74,7 @@ def bin_swap(m: int, n: int, num: int):
     int_rep = int(''.join(bin_rep), 2)
     return int_rep
 
+
 def kronecker_delta(m,n):
     if m == n:
         return 1
@@ -85,11 +86,10 @@ def U_CNOT(state, target_particle, control_particle):
     # Perform CNOT operation
     # To do this, we will need a new basis state where C and T are the first two particle
     n = len(state) // 2  # number of particles
-
     if target_particle == control_particle:
         raise ValueError("Target and Control particles must be different")
 
-    if target_particle > n or n:
+    if target_particle > n or control_particle > n:
         raise ValueError("Invalid target or control particle: not enough particles in system")
 
     # To begin, we define our new basis state. Let integers represent the corresponding state in the computational basis
