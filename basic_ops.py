@@ -74,6 +74,12 @@ def bin_swap(m: int, n: int, num: int):
     int_rep = int(''.join(bin_rep), 2)
     return int_rep
 
+def kronecker_delta(m,n):
+    if m == n:
+        return 1
+    else:
+        return 0
+
 
 def U_CNOT(state, target_particle, control_particle):
     # Perform CNOT operation
@@ -84,14 +90,24 @@ def U_CNOT(state, target_particle, control_particle):
     if target_particle > state//2 or control_particle > state//2:
         raise ValueError("Invalid target or control particle: not enough particles in system")
 
+    n = len(state) // 2  # number of particles
     # To begin, we define our new basis state. Let integers represent the corresponding state in the computational basis
     # The only operation we will need is rearranging the basis vectors to create our new basis
     comp = [x for x in range(len(state))]
     new_basis = [bin_swap(0, control_particle, x) for x in comp]
     new_basis = [bin_swap(1, target_particle, x) for x in new_basis]
     # Now define a change of basis matrix
-
-
-    return
+    basis_change_mat = np.array([[kronecker_delta(c, b) for c in comp] for b in new_basis])
+    # We can make U_CNOT matrix in new_basis as:
+    mat_new_basis = [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 0, 1],
+        [0, 0, 1, 0]
+    ]
+    for _ in range(n - 2):
+        mat_new_basis = np.kron(mat_new_basis, np.identity(2))
+    mat_comp_basis = basis_change_mat @ mat_new_basis @ basis_change_mat
+    return mat_comp_basis @ state
 
 
