@@ -10,7 +10,7 @@ SIGMA_2 = np.array([[complex(0), complex(0, -1)], [complex(0, 1), complex(0)]])
 SIGMA_3 = np.array([[complex(1), complex(0)], [complex(0), complex(-1)]])
 
 
-def single_particle_op_mat(small_mat, target_particle, n):
+def single_particle_op_mat(small_mat, target_particle: int, n: int):
     # Get the matrix representation of acting with matrix small_mat on the target particle
     # n is the total number of particles
     mat = [1]
@@ -24,41 +24,41 @@ def single_particle_op_mat(small_mat, target_particle, n):
     return mat
 
 
-def U_x(state, target_particle):
+def U_x(state, target_particle: int):
     # NOT operator acting on target particle (particle #)
     # n = number of particles in system
     n = int(np.log2(len(state)))
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_1, target_particle, n)
-    return np.matmul(mat, state)
+    return mat @ state
 
 
-def U_y(state, target_particle):
+def U_y(state, target_particle: int):
     # pi rotation around y axis
     # n = number of particles in system
     n = int(np.log2(len(state)))
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_2, target_particle, n)
-    return np.matmul(mat, state)
+    return mat @ state
 
 
-def U_z(state, target_particle):
+def U_z(state, target_particle: int):
     # Pi rotation around z axis
     # n = number of particles in system
     n = int(np.log2(len(state)))
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_3, target_particle, n)
-    return np.matmul(mat, state)
+    return mat @ state
 
 
-def U_H(state, target_particle):
+def U_H(state, target_particle: int):
     # Hadamard gate
     n = int(np.log2(len(state)))
     # 2x2 matrix for Hadamard gate acting on one particle:
     small_mat = 1/(sym.sqrt(2)) * np.array([[1, 1], [1, -1]])
     # 2n x 2n matrix to act on state:
     mat = single_particle_op_mat(small_mat, target_particle, n)
-    return np.matmul(mat, state)
+    return mat @ state
 
 
 def to_bin_str(num: int, dig: int):
@@ -81,7 +81,7 @@ def kronecker_delta(m,n):
         return 0
 
 
-def U_CNOT(state, control_particle, target_particle):
+def U_CNOT(state, control_particle: int, target_particle: int):
     # Perform CNOT operation
     # To do this, we will need a new basis state where C and T are the first two particle
     n = int(np.log2(len(state)))  # number of particles
