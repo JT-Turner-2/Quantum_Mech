@@ -66,11 +66,10 @@ def to_bin_str(num: int, dig: int):
     return f'{num:b}'.zfill(dig)
 
 
-def bin_swap(m: int, n: int, num: int):
+def bin_swap(m: int, n: int, num_to_swap: int, dig_number: int):
     # Swap mth and nth binary digits of num and return resulting integer
-    n, m = n+1, m+1  # adjust for negative index
-    bin_rep = list(to_bin_str(num, max(n, m)+1))
-    bin_rep[-m], bin_rep[-n] = bin_rep[-n], bin_rep[-m]
+    bin_rep = list(to_bin_str(num_to_swap, dig_number))
+    bin_rep[m], bin_rep[n] = bin_rep[n], bin_rep[m]
     int_rep = int(''.join(bin_rep), 2)
     return int_rep
 
@@ -94,12 +93,12 @@ def U_CNOT(state, control_particle, target_particle):
     # To begin, we define our new basis state. Let integers represent the corresponding state in the computational basis
     # The only operation we will need is rearranging the basis vectors to create our new basis
     comp = [x for x in range(len(state))]
-    new_basis = [bin_swap(0, control_particle, x) for x in comp]
+    new_basis = [bin_swap(0, control_particle, x, n) for x in comp]
     if target_particle == 0:
         # The target particle is now in the control particle position
-        new_basis = [bin_swap(1, control_particle, x) for x in new_basis]
+        new_basis = [bin_swap(1, control_particle, x, n) for x in new_basis]
     else:
-        new_basis = [bin_swap(1, target_particle, x) for x in new_basis]
+        new_basis = [bin_swap(1, target_particle, x, n) for x in new_basis]
     # Now define a change of basis matrix
     basis_change_mat = np.array([[kronecker_delta(c, b) for c in comp] for b in new_basis])
     # We can make U_CNOT matrix in new_basis as:
@@ -111,5 +110,6 @@ def U_CNOT(state, control_particle, target_particle):
     ]
     for _ in range(n - 2):
         mat_new_basis = np.kron(mat_new_basis, np.identity(2))
-    mat_comp_basis = basis_change_mat @ mat_new_basis @ basis_change_mat
+    mat_comp_basis = np.transpose(basis_change_mat) @ mat_new_basis @ basis_change_mat
     return mat_comp_basis @ state
+
