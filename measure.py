@@ -3,7 +3,7 @@ import sympy as sym
 
 
 def S_z_measure(state):
-    # Should return value of S_z for each particle
+    # Should return array giving state of S_z (0 for +z or 1 for -z) for each particle
     n = int(np.log2(len(state)))
     Sz_values = np.arange(-n/2, n/2 + 1) # All possible states of Sz
     probabilities = np.zeros(len(Sz_values))
@@ -15,7 +15,7 @@ def S_z_measure(state):
         probabilities[i] = abs(np.dot(state, projection))**2
 
     probabilities /= sum(probabilities)
-    random_Sz = np.random.choice(Sz_values, p=probabilities) # Pick a random value of Sz weighted by its corresponding probability
+    random_Sz = np.random.choice(Sz_values, p=probabilities)  # Pick a random value of Sz weighted by its corresponding probability
     return (probabilities,random_Sz)
 
 ### TESTING
