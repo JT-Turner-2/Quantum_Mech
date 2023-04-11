@@ -26,6 +26,12 @@ def measure(state):
     return measured_state
 
 
+def generate_basis_state(k, n):
+    # Generate kth basis state of comp basis for n particle system
+    state = np.zeros(2**n)
+    state[k] = 1
+    return state
+
 # TESTING
 
 psi = np.array([1/2, 1/2, 0, 0, 0, 0, 1/2, -1/2])
