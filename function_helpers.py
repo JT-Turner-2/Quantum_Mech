@@ -1,4 +1,5 @@
 import numpy as np
+import sympy as sym
 import random
 
 def random_sz_values(psi, sz_vals, sz_probs=None):
@@ -15,6 +16,16 @@ def random_sz_values(psi, sz_vals, sz_probs=None):
 
     # Return the chosen Sz value for each particle as a list
     return particle_sz
+
+
+def measure(state):
+    # Takes in a state as defined by its rep. in comp. basis
+    # Gives measurement in comp basis
+    n = int(np.log2(len(state)))
+    probabilities = state * np.conjugate(state)
+    measured_state = np.random.choice(range(n), probabilities)
+    return measured_state
+
 
 #example
 psi = np.array([1/2, 1/2, 0, 0, 0, 0, 1/2, -1/2])
