@@ -4,6 +4,7 @@ import random
 def random_sz_values(psi, sz_vals, sz_probs=None):
     # Determine the number of particles
     num_particles = int(np.log2(len(psi)))
+    sz_vals = np.array([-.5, .5])
 
     # If sz_probs is not specified, set it to be uniform
     if sz_probs is None:
@@ -19,8 +20,8 @@ def random_sz_values(psi, sz_vals, sz_probs=None):
 psi = np.array([1/2, 1/2, 0, 0, 0, 0, 1/2, -1/2])
 
 # Define the possible Sz values and their probabilities
-sz_vals = np.array([-1, 0, 1])
-sz_probs = [0.2, 0.6, 0.2]
+
+sz_probs = [0.2, 0.8]
 
 # Call the random_sz_values function to get the chosen Sz values for each particle
 particle_sz = random_sz_values(psi, sz_vals, sz_probs)
