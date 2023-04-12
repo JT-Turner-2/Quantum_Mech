@@ -22,6 +22,7 @@ def measure(state):
     # Takes in a state as defined by its rep. in comp. basis
     # Gives measurement in comp basis
     probabilities = state * np.conjugate(state)
+    probabilities = np.array(probabilities, dtype='float64')  # Deal with type issues with 0 object
     measured_state = np.random.choice(range(len(state)), p=probabilities)
     return measured_state
 
@@ -33,9 +34,9 @@ def generate_basis_state(k, n):
     return state
 
 # TESTING
-
-psi = np.array([1/2, 1/2, 0, 0, 0, 0, 1/2, -1/2])
-print(measure(psi))
+#
+# psi = np.array([1/2, 1/2, 0, 0, 0, 0, 1/2, -1/2])
+# print(measure(psi))
 
 
 #
