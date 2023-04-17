@@ -6,6 +6,7 @@ def grovers_algorithm (oracle, n):
     psi = generate_basis_state(1, state_size)
     #step 1 Hadamard
     psi=run_everything(psi,U_H())
+    # nexts steps need to repeat until sufficent probability. todo assign value
     #step 2 - Oracle
     psi=oracle(psi)
     #step 3 - diffuser
