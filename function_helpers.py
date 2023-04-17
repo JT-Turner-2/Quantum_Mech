@@ -51,3 +51,9 @@ def generate_basis_state(k, n):
 # print("Particle Sz values:")
 # for i in range(len(particle_sz)):
 #     print(f"Particle {i+1}: {particle_sz[i]}")
+
+def run_everything (state,operator):
+    n=int(np.log2(len(state)))
+    for i in range(n):
+        state=operator(state,i)
+    return state
