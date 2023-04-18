@@ -57,3 +57,6 @@ def run_everything (state,operator):
     for i in range(n):
         state=operator(state,i)
     return state
+def find_num_particles(psi):
+    n=int(np.log2(psi))
+    return n
