@@ -4,7 +4,7 @@ import sympy as sym
 
 
 from basic_ops import *
-from function_helpers import measure, generate_basis_state
+from function_helpers import measure, generate_basis_state, find_num_particles
 
 
 def run_deutsch_jozsa(oracle, n):
@@ -37,18 +37,17 @@ def dj_oracle_1(state):
 def dj_oracle_2(state):
     # Oracle for DJ algorithm
     # This one is constant (1). We will just apply a not gate to last particle
-    n = int(np.log2(len(state)))
+    n = find_num_particles(state)
     state = U_x(state, n)
     return state
 
 def dj_oracle_3(state):
     # This oracle will be even. Let's do with by applying a CNOT gate to half the particles
-    n = int(np.log2(len(state)))
-    if n % 2 != 0:
+    n = find_num_particles(state)
+    if n % 2 == 0:
+        # Note that we want n-1 to be even as there are n-1 x inputs plus one y input
         raise ValueError("Need even number of particles")
     for i in range(n//2):
         state = U_CNOT(state, i, n-1)  # particle i controls, particle n (y) is target
     return state
-
-
 

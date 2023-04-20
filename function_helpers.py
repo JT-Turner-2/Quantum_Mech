@@ -33,30 +33,14 @@ def generate_basis_state(k, n):
     state[k] = 1
     return state
 
-# TESTING
-#
-# psi = np.array([1/2, 1/2, 0, 0, 0, 0, 1/2, -1/2])
-# print(measure(psi))
-
-
-#
-# # Define the possible Sz values and their probabilities
-#
-# sz_probs = [0.2, 0.8]
-#
-# # Call the random_sz_values function to get the chosen Sz values for each particle
-# particle_sz = random_sz_values(psi, sz_vals, sz_probs)
-#
-# # Print the chosen Sz value for each particle
-# print("Particle Sz values:")
-# for i in range(len(particle_sz)):
-#     print(f"Particle {i+1}: {particle_sz[i]}")
 
 def run_everything (state,operator):
-    n=int(np.log2(len(state)))
+    n = find_num_particles(state)
     for i in range(n):
-        state=operator(state,i)
+        state = operator(state, i)
     return state
+
+
 def find_num_particles(psi):
-    n=int(np.log2(psi))
+    n = int(np.log2(len(psi)))
     return n

@@ -3,6 +3,7 @@
 import numpy as np
 import sympy as sym
 # Using sympy for sqrt 2 to be exact -- may need to change this, but hopefully will work
+from function_helpers import find_num_particles
 
 # Defining Pauli spin mats
 SIGMA_1 = np.array([[complex(0), complex(1, 0)], [complex(1, 0), complex(0)]])
@@ -27,7 +28,7 @@ def single_particle_op_mat(small_mat, target_particle: int, n: int):
 def U_x(state, target_particle: int):
     # NOT operator acting on target particle (particle #)
     # n = number of particles in system
-    n = int(np.log2(len(state)))
+    n = find_num_particles(state)
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_1, target_particle, n)
     return mat @ state
@@ -36,7 +37,7 @@ def U_x(state, target_particle: int):
 def U_y(state, target_particle: int):
     # pi rotation around y axis
     # n = number of particles in system
-    n = int(np.log2(len(state)))
+    n = find_num_particles(state)
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_2, target_particle, n)
     return mat @ state
@@ -45,7 +46,7 @@ def U_y(state, target_particle: int):
 def U_z(state, target_particle: int):
     # Pi rotation around z axis
     # n = number of particles in system
-    n = int(np.log2(len(state)))
+    n = find_num_particles(state)
     # Construct matrix:
     mat = single_particle_op_mat(SIGMA_3, target_particle, n)
     return mat @ state
@@ -53,7 +54,7 @@ def U_z(state, target_particle: int):
 
 def U_H(state, target_particle: int):
     # Hadamard gate
-    n = int(np.log2(len(state)))
+    n = find_num_particles(state)
     # 2x2 matrix for Hadamard gate acting on one particle:
     small_mat = 1/(sym.sqrt(2)) * np.array([[1, 1], [1, -1]])
     # 2n x 2n matrix to act on state:
@@ -84,7 +85,7 @@ def kronecker_delta(m,n):
 def U_CNOT(state, control_particle: int, target_particle: int):
     # Perform CNOT operation
     # To do this, we will need a new basis state where C and T are the first two particle
-    n = int(np.log2(len(state)))  # number of particles
+    n = find_num_particles(state)  # number of particles
     if target_particle == control_particle:
         raise ValueError("Target and Control particles must be different")
 
