@@ -1,7 +1,8 @@
 from basic_ops import *
 from function_helpers import measure, generate_basis_state, run_everything
-from actual_diffuser import *
-def grovers_algorithm (oracle, n):
+
+
+def grover_algorithm (oracle, n):
     # Function to run grover's algorithm, given an oracle identifying an answer and n
     # n is number of particles in system
 
@@ -15,7 +16,7 @@ def grovers_algorithm (oracle, n):
     for _ in range(number_of_steps):
         psi = oracle(psi)
         psi = diffuser(oracle, n, psi)
-
+        print(psi)
     #Step 4 - measure
     measurement = measure(psi)
     return measurement
@@ -36,6 +37,20 @@ def generate_oracle(answer):
     return oracle_func
 
 
+def diffuser (oracle,n,psi):
+    # Step 1- Hadamard
+    psi = run_everything(psi, U_H)
+    # Step 2 - U_x
+    psi = run_everything(psi, U_x)
+    # Step 3 - oracle should be the controlled z gate
+    psi = oracle(psi)
+    # Step 4 - U_x
+    psi = run_everything(psi, U_x)
+    # Step 5- Hadamard
+    psi = run_everything(psi, U_H)
+    return psi
+
+
 oracle_1 = generate_oracle(0)
-m = grovers_algorithm(oracle_1, 4)
+m = grover_algorithm(oracle_1, 3)
 print(m)
