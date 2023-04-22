@@ -5,6 +5,7 @@ from function_helpers import measure, generate_basis_state, run_everything
 
 
 def grover_algorithm (oracle, n):
+    counter=0
     # Function to run grover's algorithm, given an oracle identifying an answer and n
     # n is number of particles in system
 
@@ -17,10 +18,12 @@ def grover_algorithm (oracle, n):
     number_of_steps = int(np.sqrt(dim)) # TODO May need to modify this calculation with a constant
     for _ in range(number_of_steps):
         psi = oracle(psi)
+        counter=counter+dim
         psi = diffuser(oracle, psi)
+        counter=counter+np.sqrt(dim)
     # Now measure the state; should give desired output with high probability
     measurement = measure(psi)
-    return measurement
+    return measurement, counter
 
 
 def generate_oracle(answer):
