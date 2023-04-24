@@ -40,24 +40,27 @@ i=0
 while i>20:
   grover_counter_holder = 0
   classical_counter = classical_implementation(state)
-classical_counter_list.append(classical_counter)
-preferred_result = 0  # whateverwe want the perferred result to be
-measurement, grover_counter = grover_algorithm(oracle, n)
-while measurement != preferred_result:
+  classical_counter_list.append(classical_counter)
+  preferred_result = 0  # whateverwe want the perferred result to be
+  measurement, grover_counter = grover_algorithm(oracle, n)
+  while measurement != preferred_result:
     grover_counter_holder = grover_counter_holder + grover_counter
     measurement, grover_counter = grover_algorithm(oracle, n)
-grover_counter_holder=grover_counter_holder+grover_counter
-grover_counter_list.append(grover_counter_holder)
+  grover_counter_holder=grover_counter_holder+grover_counter
+  grover_counter_list.append(grover_counter_holder)
+  i=i+1
 
 
 
 
 
-
+#averge calcs
+classical_average=np.mean(classical_counter_list)
+grover_average=np.mean(grover_counter_list)
 
 #plot code
 implementation=["Classical","Quantum"]
-values=[classical_counter,grover_counter]
+values=[classical_average,grover_average]
 plt.bar(implementation,values)
 plt.xlabel("Implementation")
 plt.ylabel("Iterations")
