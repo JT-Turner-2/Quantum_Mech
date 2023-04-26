@@ -58,6 +58,25 @@ def generate_test_data(num_particles):
     arr[ans] = 1
     return arr
 
+
+#classical plot
+classical_data=[]
+for m in range(2,7):
+    classical_list=[]
+    for _ in range(10):
+        testlist=generate_test_data(m)
+        classical_counter=classical_implementation(testlist)
+        classical_list.append(classical_counter)
+    classical_data.append(classical_list)
+    print(f"Process comple for m={m}")
+
+
+
+
+
+
+
+
 # # replace the following zeroes with whatever we want to put in
 # state = 0
 # answer = 0
