@@ -4,6 +4,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+from scipy.optimize import curve_fit
+
 # Other script imports
 from basic_ops import *
 from function_helpers import *
@@ -68,7 +70,25 @@ for m in range(2,7):
         classical_counter=classical_implementation(testlist)
         classical_list.append(classical_counter)
     classical_data.append(classical_list)
-    print(f"Process comple for m={m}")
+    print(f"Process complete for m={m}")
+classical_data=np.array(classical_data)
+classical_avg=np.mean(classical_data, axis=1)
+lengths = np.array([2**m for m in range(2,7)])
+#avg fit
+def classical_fit_func(x,a,b):
+    return a*x+b
+popt,pcov=curve_fit(classical_fit_func, lengths, classical_avg)
+
+#plot code
+implementation=["Classical","Quantum"]
+
+plt.plot(lengths,classical_data, '.', c="blue")
+plt.plot(lengths, classical_avg, '*', c='red', markersize=10)
+plt.plot(lengths,classical_fit_func(lengths,*popt),c='black')
+plt.xlabel("Length of List")
+plt.ylabel("Iterations")
+plt.title("Iterations for Classical Algorithim")
+plt.show()
 
 
 
