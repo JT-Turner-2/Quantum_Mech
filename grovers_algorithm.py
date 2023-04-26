@@ -5,22 +5,21 @@ from function_helpers import measure, generate_basis_state, run_everything
 
 
 def grover_algorithm (oracle, n):
-    counter=0
+    counter = 0
     # Function to run grover's algorithm, given an oracle identifying an answer and n
     # n is number of particles in system
 
     # First, initialize a uniform superposition by starting in state 0 and apply Hadamard to all
     psi = generate_basis_state(0, n)
     psi = run_everything(psi, U_H)
-    dim = len(psi) # also known as big N in literature
+    dim = len(psi)  # also known as big N in literature
 
     # Now apply oracle and then diffusion operator number of steps times
-    number_of_steps = int(np.sqrt(dim)) # TODO May need to modify this calculation with a constant
+    number_of_steps = int(np.sqrt(n) * np.pi/np.sqrt(4))
     for _ in range(number_of_steps):
         psi = oracle(psi)
-        counter=counter+dim
         psi = diffuser(oracle, psi)
-        counter=counter+np.sqrt(dim)
+        counter = counter + find_num_particles(psi)  # just incrementing the counter by the number of particles
     # Now measure the state; should give desired output with high probability
     measurement = measure(psi)
     return measurement, counter
@@ -62,6 +61,6 @@ def z_0(state):
     mat[0, 0] = 1
     return mat @ state
 
-# oracle_1 = generate_oracle(1)
+# oracle_1 = generate_oracle(7)
 # m = grover_algorithm(oracle_1, 6)
 # print(m)
