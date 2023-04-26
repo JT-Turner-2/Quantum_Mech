@@ -48,6 +48,7 @@ def test_grover(target_list):
     # It's not good if our code didn't work after 100 attempts, we should probably raise an error to say that
     raise RuntimeError("Grover's Algorithm failed after 100 attempts")
 
+        # create the graph bit
 
 def generate_test_data(num_particles):
     # Generates a test np array for a given number of particles
@@ -57,32 +58,42 @@ def generate_test_data(num_particles):
     arr[ans] = 1
     return arr
 
+# replace the following zeroes with whatever we want to put in
+state = 0
+answer = 0
+n = 0
 
-d = generate_test_data(6)
-classical_count = classical_implementation(d)
-grover_count = test_grover(d)
-print(f'Classical took {classical_count} steps')
-print(f'Grover\'s algorithm took {grover_count} steps')
+classical_counter_list=[]
+grover_counter_list=[]
+i=0
+while i>20:
+  grover_counter_holder = 0
+  classical_counter = classical_implementation(state)
+  classical_counter_list.append(classical_counter)
+  preferred_result = 0  # whateverwe want the perferred result to be
+  measurement, grover_counter = grover_algorithm(oracle, n)
+  while measurement != preferred_result:
+    grover_counter_holder = grover_counter_holder + grover_counter
+    measurement, grover_counter = grover_algorithm(oracle, n)
+  grover_counter_holder=grover_counter_holder+grover_counter
+  grover_counter_list.append(grover_counter_holder)
+  i=i+1
 
-# # replace the following zeroes with whatever we want to put in
-# state = 0
-# answer = 0
-# n = 0
-#
-# classical_counter = classical_implementation(state)
-# grover_counter_holder = 0
-# preferred_result = 0  # whateverwe want the perferred result to be
-# measurement, grover_counter = grover_algorithm(oracle, n)
-# while measurement != preferred_result:
-#     grover_counter_holder = grover_counter_holder + grover_counter
-#     measurement, grover_counter = grover_algorithm(oracle, n)
-# grover_counter_holder=grover_counter_holder+grover_counter
-# implementation=["Classical","Quantum"]
-# values=[classical_counter,grover_counter]
-# plt.bar(implementation, values)
-# plt.xlabel("Implementation")
-# plt.ylabel("Iterations")
-# plt.title("Effectivness of Classical versus Grover's Algoritim")
-# plt.show()
 
+
+
+
+#averge calcs
+classical_average=np.mean(classical_counter_list)
+grover_average=np.mean(grover_counter_list)
+
+#plot code
+implementation=["Classical","Quantum"]
+values=[classical_average,grover_average]
+plt.bar(implementation,values)
+plt.xlabel("Implementation")
+plt.ylabel("Iterations")
+plt.title("Effectivness of Classical versus Grover's Algoritim")
+plt.show()
+ 
   
