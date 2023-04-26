@@ -38,17 +38,15 @@ def test_grover(target_list):
     # Now generate our oracle, encoding our problem
     oracle = generate_oracle(target_pos)
     # Finally run grover's algorithm until we get the right answer (or stop after 100 attempts)
-    for _ in range(100):
+    for _ in range(50):
         ans, c = grover_algorithm(oracle, m)
         counter += c  # increment the counter based on how many operation grover's algorithm did
         if ans == target_pos:
             # We got the right answer
             return counter
-        else:
-            print('failed')
         # Otherwise, we try again
     # It's not good if our code didn't work after 100 attempts, we should probably raise an error to say that
-    raise RuntimeError("Grover's Algorithm failed after 100 attempts")
+    raise RuntimeError("Grover's Algorithm failed after 50 attempts")
 
         # create the graph bit
 
@@ -61,37 +59,64 @@ def generate_test_data(num_particles):
     return arr
 
 
-#classical plot
-classical_data=[]
-for m in range(2,7):
-    classical_list=[]
-    for _ in range(10):
-        testlist=generate_test_data(m)
-        classical_counter=classical_implementation(testlist)
+# Perform algorithms and count\
+NUM_TRIALS = 10
+classical_data = []
+grover_data = []
+for m in range(3, 7):
+    # Note our implementation doesn't work that well for m=2
+    classical_list = []
+    grover_list = []
+    for _ in range(NUM_TRIALS):
+        testlist = generate_test_data(m)
+        classical_counter = classical_implementation(testlist)
         classical_list.append(classical_counter)
+        grover_counter = test_grover(testlist)
+        grover_list.append(grover_counter)
+
     classical_data.append(classical_list)
+    grover_data.append(grover_list)
     print(f"Process complete for m={m}")
-classical_data=np.array(classical_data)
-classical_avg=np.mean(classical_data, axis=1)
-lengths = np.array([2**m for m in range(2,7)])
-#avg fit
+# Now get the data in a nice format, take averages, errors, etc...
+classical_data = np.array(classical_data)
+classical_avg = np.mean(classical_data, axis=1)
+classical_err = np.std(classical_data, axis=1) / np.sqrt(NUM_TRIALS)
+
+grover_data = np.array(grover_data)
+grover_avg = np.mean(grover_data, axis=1)
+grover_err = np.std(grover_data, axis=1) / np.sqrt(NUM_TRIALS)
+
+lengths = np.array([2**m for m in range(3, 7)])
+
+
+# Fit to our model
 def classical_fit_func(x,a,b):
     return a*x+b
-popt,pcov=curve_fit(classical_fit_func, lengths, classical_avg)
 
-#plot code
-implementation=["Classical","Quantum"]
 
-plt.plot(lengths,classical_data, '.', c="blue")
-plt.plot(lengths, classical_avg, '*', c='red', markersize=10)
-plt.plot(lengths,classical_fit_func(lengths,*popt),c='black')
+popt_classical, pcov_classical = curve_fit(classical_fit_func, lengths, classical_avg)
+
+# plot the classical case
+plt.figure()
+plt.plot(lengths, classical_data, '.', c="blue")
+plt.plot(lengths, classical_avg, 's', c='red', markersize=5)
+plt.errorbar(lengths, classical_avg, yerr=classical_err, ecolor='darkred', ls='none', capsize=3, capthick=2)
+plt.plot(lengths, classical_fit_func(lengths, *popt_classical), c='black')
 plt.xlabel("Length of List")
 plt.ylabel("Iterations")
-plt.title("Iterations for Classical Algorithim")
+plt.title("Iterations for Classical Algorithm")
 plt.show()
 
 
-
+# Plot for grover's algorithm
+plt.figure()
+plt.plot(lengths, grover_data, '.', c="blue")
+plt.plot(lengths, grover_avg, 's', c='red', markersize=5)
+plt.errorbar(lengths, grover_avg, yerr=grover_err, ecolor='darkred', ls='none', capsize=3, capthick=2)
+plt.xlabel("Length of List")
+plt.ylabel("Iterations")
+plt.title("Iterations for Grover's Algorithm")
+plt.show()
 
 
 
