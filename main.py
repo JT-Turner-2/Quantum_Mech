@@ -52,7 +52,7 @@ def test_grover(target_list):
 
 def generate_test_data(num_particles):
     # Generates a test np array for a given number of particles
-    size = num_particles ** 2
+    size = 2 ** num_particles
     arr = np.zeros(size)
     ans = np.random.randint(size)
     arr[ans] = 1
