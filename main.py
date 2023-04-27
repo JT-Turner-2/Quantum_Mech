@@ -106,24 +106,39 @@ popt_grover, pcov_grover = curve_fit(sqrt_fit_func, lengths, grover_avg)
 
 # plot the classical case
 plt.figure()
+plt.plot(length_space, linear_fit_func(length_space, *popt_classical), c='black')
 plt.plot(lengths, classical_data, '.', c="blue")
 plt.plot(lengths, classical_avg, 's', c='red', markersize=5)
 plt.errorbar(lengths, classical_avg, yerr=classical_err, ecolor='darkred', ls='none', capsize=3, capthick=2)
-plt.plot(length_space, linear_fit_func(length_space, *popt_classical), c='black')
 plt.xlabel("Length of List")
-plt.ylabel("Iterations")
-plt.title("Iterations for Classical Algorithm")
+plt.ylabel("Average Iterations")
+plt.title("Average Iterations for Classical Algorithm")
 plt.show()
 
 
 # Plot for grover's algorithm
 plt.figure()
+plt.plot(length_space, sqrt_fit_func(length_space, *popt_grover), c='black')
 plt.plot(lengths, grover_data, '.', c="blue")
 plt.plot(lengths, grover_avg, 's', c='red', markersize=5)
 plt.errorbar(lengths, grover_avg, yerr=grover_err, ecolor='darkred', ls='none', capsize=3, capthick=2)
-plt.plot(length_space, sqrt_fit_func(length_space, *popt_grover), c='black')
 plt.xlabel("Length of List")
-plt.ylabel("Iterations")
-plt.title(r"Iterations for Grover's Algorithm")
+plt.ylabel("Average Iterations")
+plt.title(r"Average Iterations for Grover's Algorithm")
 plt.show()
 
+# Also make a plot that shows both averages/trendlines
+plt.figure()
+# Plot for classical case
+plt.plot(length_space, linear_fit_func(length_space, *popt_classical), c='lightskyblue')
+plt.plot(lengths, classical_avg, 's', c='blue', markersize=5)
+plt.errorbar(lengths, classical_avg, yerr=classical_err, ecolor='darkblue', ls='none', capsize=3, capthick=2)
+# Plot for grover's algorithm
+plt.plot(length_space, sqrt_fit_func(length_space, *popt_grover), c='lightgreen')
+plt.plot(lengths, grover_avg, 's', c='green', markersize=5)
+plt.errorbar(lengths, grover_avg, yerr=grover_err, ecolor='darkgreen', ls='none', capsize=3, capthick=2)
+# Labels and stuff
+plt.xlabel("Length of List")
+plt.ylabel("Average Iterations")
+plt.title(r"Average Iterations for Grover's Algorithm vs Classical Implementation")
+plt.show()
