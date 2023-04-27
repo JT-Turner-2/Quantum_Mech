@@ -19,7 +19,6 @@ def grover_algorithm (oracle, n):
     for _ in range(number_of_steps):
         psi = oracle(psi)
         psi = diffuser(psi)
-        print(psi)
         counter = counter + find_num_particles(psi)  # just incrementing the counter by the number of particles
     # Now measure the state; should give desired output with high probability
     measurement = measure(psi)
