@@ -15,13 +15,15 @@ def grover_algorithm (oracle, n):
     dim = len(psi)  # also known as big N in literature
 
     # Now apply oracle and then diffusion operator number of steps times
-    number_of_steps = int(np.sqrt(dim) * np.pi/(4))
+    number_of_steps = int(np.sqrt(dim) * np.pi/4)
     for _ in range(number_of_steps):
         psi = oracle(psi)
-        psi = diffuser(oracle, psi)
+        psi = diffuser(psi)
+        print(psi)
         counter = counter + find_num_particles(psi)  # just incrementing the counter by the number of particles
     # Now measure the state; should give desired output with high probability
     measurement = measure(psi)
+
     return measurement, counter
 
 
@@ -40,16 +42,9 @@ def generate_oracle(answer):
     return oracle_func
 
 
-def diffuser(oracle, psi):
-    # Step 1- Hadamard
+def diffuser(psi):
     psi = run_everything(psi, U_H)
-    # Step 2 - U_x
-    # psi = run_everything(psi, U_x)
-    # Step 3 - oracle should be the controlled z gate
     psi = z_0(psi)
-    # Step 4 - U_x
-    # psi = run_everything(psi, U_x)
-    # Step 5- Hadamard
     psi = run_everything(psi, U_H)
     return psi
 
@@ -61,6 +56,7 @@ def z_0(state):
     mat[0, 0] = 1
     return mat @ state
 
-# oracle_1 = generate_oracle(7)
-# m = grover_algorithm(oracle_1, 6)
+# TESTING
+# oracle_1 = generate_oracle(1)
+# m = grover_algorithm(oracle_1, 4)
 # print(m)
