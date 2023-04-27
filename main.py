@@ -60,10 +60,11 @@ def generate_test_data(num_particles):
 
 
 # Perform algorithms and count\
-NUM_TRIALS = 10
+NUM_TRIALS = 20
 classical_data = []
 grover_data = []
-for m in range(3, 6):
+m_range = range(2, 8)
+for m in m_range:
     # Note our implementation doesn't work that well for m=2
     classical_list = []
     grover_list = []
@@ -86,22 +87,29 @@ grover_data = np.array(grover_data)
 grover_avg = np.mean(grover_data, axis=1)
 grover_err = np.std(grover_data, axis=1) / np.sqrt(NUM_TRIALS)
 
-lengths = np.array([2**m for m in range(3, 6)])
-
+lengths = np.array([2**m for m in m_range])
+length_space = np.linspace(lengths.min(), lengths.max())
 
 # Fit to our model
+# First, define fitting functions
 def linear_fit_func(x, a, b):
     return a*x+b
 
 
-popt_classical, pcov_classical = curve_fit(linear_fit_func, lengths, classical_avg)
+def sqrt_fit_func(x, a, b):
+    return a*np.sqrt(x) + b
+
+
+# Now actually do the fits
+popt_classical, pcov_classical = curve_fit(linear_fit_func, lengths, classical_avg, sigma=classical_err, absolute_sigma=True)
+popt_grover, pcov_grover = curve_fit(sqrt_fit_func, lengths, grover_avg)
 
 # plot the classical case
 plt.figure()
 plt.plot(lengths, classical_data, '.', c="blue")
 plt.plot(lengths, classical_avg, 's', c='red', markersize=5)
 plt.errorbar(lengths, classical_avg, yerr=classical_err, ecolor='darkred', ls='none', capsize=3, capthick=2)
-plt.plot(lengths, linear_fit_func(lengths, *popt_classical), c='black')
+plt.plot(length_space, linear_fit_func(length_space, *popt_classical), c='black')
 plt.xlabel("Length of List")
 plt.ylabel("Iterations")
 plt.title("Iterations for Classical Algorithm")
@@ -113,51 +121,9 @@ plt.figure()
 plt.plot(lengths, grover_data, '.', c="blue")
 plt.plot(lengths, grover_avg, 's', c='red', markersize=5)
 plt.errorbar(lengths, grover_avg, yerr=grover_err, ecolor='darkred', ls='none', capsize=3, capthick=2)
+plt.plot(length_space, sqrt_fit_func(length_space, *popt_grover), c='black')
 plt.xlabel("Length of List")
 plt.ylabel("Iterations")
-plt.title("Iterations for Grover's Algorithm")
+plt.title(r"Iterations for Grover's Algorithm")
 plt.show()
 
-
-
-
-
-# # replace the following zeroes with whatever we want to put in
-# state = 0
-# answer = 0
-# n = 0
-#
-# classical_counter_list=[]
-# grover_counter_list=[]
-# i=0
-# while i>20:
-#   grover_counter_holder = 0
-#   classical_counter = classical_implementation(state)
-#   classical_counter_list.append(classical_counter)
-#   preferred_result = 0  # whateverwe want the perferred result to be
-#   measurement, grover_counter = grover_algorithm(oracle, n)
-#   while measurement != preferred_result:
-#     grover_counter_holder = grover_counter_holder + grover_counter
-#     measurement, grover_counter = grover_algorithm(oracle, n)
-#   grover_counter_holder=grover_counter_holder+grover_counter
-#   grover_counter_list.append(grover_counter_holder)
-#   i=i+1
-
-#
-#
-#
-#
-# #averge calcs
-# classical_average=np.mean(classical_counter_list)
-# grover_average=np.mean(grover_counter_list)
-#
-# #plot code
-# implementation=["Classical","Quantum"]
-# values=[classical_average,grover_average]
-# plt.bar(implementation,values)
-# plt.xlabel("Implementation")
-# plt.ylabel("Iterations")
-# plt.title("Effectivness of Classical versus Grover's Algoritim")
-# plt.show()
-#
-  
