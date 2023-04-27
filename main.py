@@ -63,7 +63,7 @@ def generate_test_data(num_particles):
 NUM_TRIALS = 10
 classical_data = []
 grover_data = []
-for m in range(3, 7):
+for m in range(3, 6):
     # Note our implementation doesn't work that well for m=2
     classical_list = []
     grover_list = []
@@ -86,22 +86,22 @@ grover_data = np.array(grover_data)
 grover_avg = np.mean(grover_data, axis=1)
 grover_err = np.std(grover_data, axis=1) / np.sqrt(NUM_TRIALS)
 
-lengths = np.array([2**m for m in range(3, 7)])
+lengths = np.array([2**m for m in range(3, 6)])
 
 
 # Fit to our model
-def classical_fit_func(x,a,b):
+def linear_fit_func(x, a, b):
     return a*x+b
 
 
-popt_classical, pcov_classical = curve_fit(classical_fit_func, lengths, classical_avg)
+popt_classical, pcov_classical = curve_fit(linear_fit_func, lengths, classical_avg)
 
 # plot the classical case
 plt.figure()
 plt.plot(lengths, classical_data, '.', c="blue")
 plt.plot(lengths, classical_avg, 's', c='red', markersize=5)
 plt.errorbar(lengths, classical_avg, yerr=classical_err, ecolor='darkred', ls='none', capsize=3, capthick=2)
-plt.plot(lengths, classical_fit_func(lengths, *popt_classical), c='black')
+plt.plot(lengths, linear_fit_func(lengths, *popt_classical), c='black')
 plt.xlabel("Length of List")
 plt.ylabel("Iterations")
 plt.title("Iterations for Classical Algorithm")
