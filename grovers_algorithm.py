@@ -15,7 +15,7 @@ def grover_algorithm (oracle, n):
     dim = len(psi)  # also known as big N in literature
 
     # Now apply oracle and then diffusion operator number of steps times
-    number_of_steps = int(np.sqrt(n) * np.pi/np.sqrt(4))
+    number_of_steps = int(np.sqrt(dim) * np.pi/(4))
     for _ in range(number_of_steps):
         psi = oracle(psi)
         psi = diffuser(oracle, psi)
